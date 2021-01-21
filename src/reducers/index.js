@@ -32,9 +32,7 @@ const reducer = (state = initialState, action) => {
                 return(state);
             }
         case("REMOVE_ITEM"):
-            
             const { price, id} = action.payload;
-
             return {
                 ...state,
                 additionalPrice: (state.additionalPrice -= price),
