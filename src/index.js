@@ -1,20 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-
-import 'bulma/css/bulma.css';
-import './styles.scss';
-
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Provider } from "react-redux";
 
-import reducer from '../src/reducers';
+import reducer from './reducers';
+
+import './index.css';
+import App from './App'
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const store = createStore(reducer);
 
-const rootElement = document.getElementById('root');
 ReactDOM.render(
-    <Provider store={store}>
+  <Provider store={store}>
+    <Router>
         <App />
-    </Provider>,
-    rootElement);
+    </Router>
+  </Provider>,
+  document.getElementById('root')
+);
