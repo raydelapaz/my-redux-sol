@@ -4,6 +4,8 @@ import MovieListItem from './MovieListItem';
 import MovieFooter from './MovieFooter';
 import FavoriteMovieList from './FavoriteMovieList';
 
+import { connect } from 'react-redux';
+
 const MovieList = (props)=> {
     const { movies, favoriteMovies } = props;
 
@@ -26,9 +28,16 @@ const MovieList = (props)=> {
                     }
                 </tbody>
             </table>
+            
             <MovieFooter totalMovies={movies.length}/>
         </div>
     );
 }
 
-export default MovieList;
+const mapStateToProps = state => {
+    return({
+        movies: state.movieReducer.movies
+    });
+}
+
+export default connect(mapStateToProps)(MovieList);

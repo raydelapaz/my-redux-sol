@@ -1,54 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Route, Switch, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
+
 import MovieList from './components/MovieList';
 import Movie from './components/Movie';
 
 import MovieHeader from './components/MovieHeader';
 
 import AddMovieForm from './components/AddMovieForm';
-import EditMovieForm from './components/EditMovieForm';
 import FavoriteMovieList from './components/FavoriteMovieList';
 
-const App = (props) => {
-  const [movies, setMovies] = useState([]);
-  const [favoriteMovies, setFavoriteMovies] = useState([]);
-
-  const deleteMovie = (id)=> {
-    setMovies(movies.filter(movie=>(String(movie.id) !== String(id))));
-  }
-
-  const addToFavorites = (movie) => {
-    if(!favoriteMovies.find(m => (m.id=== movie.id))) {
-        setFavoriteMovies([...favoriteMovies, {id:movie.id, title:movie.title}]);
-    }
-  }
+const App = props => {
+  const { displayFavorites } = props;
 
   return (
     <div>
       <nav className="navbar navbar-dark bg-dark">
         <span className="navbar-brand" ><img width="40px" alt="" src="./Lambda-Logo-Red.png"/>Redux Module Project</span>
       </nav>
+
       <div className="container">
         <MovieHeader/>
         <div className="row ">
-          <FavoriteMovieList favoriteMovies={favoriteMovies}/>
+          {displayFavorites && <FavoriteMovieList/>}
         
           <Switch>
-            <Route path="/movies/edit/:id">
-              <EditMovieForm setMovies={setMovies}/>
-            </Route>
-
             <Route exact path="/movies/add">
-              <AddMovieForm setMovies={setMovies}/>
+              <AddMovieForm />
             </Route>
 
             <Route path="/movies/:id">
-              <Movie addToFavorites={addToFavorites} deleteMovie={deleteMovie}/>
+              <Movie />
             </Route>
 
             <Route path="/movies">
-              <MovieList movies={movies}/>
+              <MovieList/>
             </Route>
 
             <Route path="/">
@@ -61,6 +48,11 @@ const App = (props) => {
   );
 };
 
+const mapStateToProps = state => {
+  return({
+    displayFavorites: state.favoritesReducer.displayFavorites
+  });
+}
 
-export default App;
+export default connect(mapStateToProps)(App);
 

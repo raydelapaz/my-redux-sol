@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { addMovie } from './../actions/movieActions';
+import { connect } from 'react-redux';
+
 import { Link, useHistory } from 'react-router-dom';
 
-import axios from 'axios';
-
 const AddMovieForm = (props) => {
-    const { setMovies } = props;
+    const { addMovie } = props;
     const { push } = useHistory();
 
     const [movie, setMovie] = useState({
@@ -23,12 +24,8 @@ const AddMovieForm = (props) => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        axios.post('http://localhost:5000/api/movies', movie)
-            .then(res=>{
-                setMovies(res.data);
-                push('/movies');
-            });
+        addMovie(movie);
+        push(`/movies`);
     }
 
     const { title, director, genre, metascore, description } = movie;
@@ -73,4 +70,4 @@ const AddMovieForm = (props) => {
     </div>);
 }
 
-export default AddMovieForm;
+export default connect(null, { addMovie })(AddMovieForm);

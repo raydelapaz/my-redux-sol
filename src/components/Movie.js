@@ -1,42 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import React from 'react';
+import { connect } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 
-import axios from 'axios';
+import { deleteMovie } from './../actions/movieActions';
+import { addFavorite } from './../actions/favoritesActions';
 
 const Movie = (props) => {
-    const { addToFavorites, deleteMovie } = props;
-
-    const [movie, setMovie] = useState('');
+    const { movies, displayFavorites, deleteMovie, addFavorite } = props;
 
     const { id } = useParams();
     const { push } = useHistory();
 
-    useEffect(()=>{
-        axios.get(`http://localhost:5000/api/movies/${id}`)
-            .then(res=>{
-                setMovie(res.data);
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-    }, [id]);
+    const movie = movies[id];
 
+    
     const handleFavoriteClick = () => {
-        addToFavorites({
-            id: movie.id,
-            title: movie.title
-        });
+        addFavorite(movie);
     }
 
     const handleDeleteClick = () => {
-        axios.delete(`http://localhost:5000/api/movies/${id}`)
-            .then(res=>{
-                deleteMovie(id);
-                push('/movies');
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+        deleteMovie(movie.id);
+        push(`/movies`);
     }
 
     return(<div className="modal-page col">
@@ -68,8 +52,7 @@ const Movie = (props) => {
                         </section>
                         
                         <section>
-                            <span onClick={handleFavoriteClick} className="m-2 btn btn-dark">Favorite</span>
-                            <Link to={`/movies/edit/${movie.id}`} className="m-2 btn btn-success">Edit</Link>
+                            {displayFavorites && <span onClick={handleFavoriteClick} className="m-2 btn btn-dark">Favorite</span>}
                             <span onClick={handleDeleteClick} className="delete"><input type="button" className="m-2 btn btn-danger" value="Delete"/></span>
                         </section>
                     </div>
@@ -79,4 +62,11 @@ const Movie = (props) => {
     </div>);
 }
 
-export default Movie;
+const mapStateToProps = state => {
+    return({
+        movies: state.movieReducer.movies,
+        displayFavorites: state.favoritesReducer.displayFavorites
+    });
+}
+
+export default connect(mapStateToProps, { deleteMovie, addFavorite })(Movie);
