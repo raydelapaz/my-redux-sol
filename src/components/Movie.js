@@ -12,7 +12,6 @@ const Movie = (props) => {
     const { push } = useHistory();
 
     const movie = movies[id];
-
     
     const handleFavoriteClick = () => {
         addFavorite(movie);

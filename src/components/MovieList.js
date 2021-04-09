@@ -7,7 +7,7 @@ import FavoriteMovieList from './FavoriteMovieList';
 import { connect } from 'react-redux';
 
 const MovieList = (props)=> {
-    const { movies, favoriteMovies } = props;
+    const { movies } = props;
 
     return (
         <div className="col">
