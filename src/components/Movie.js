@@ -11,7 +11,7 @@ const Movie = (props) => {
     const { id } = useParams();
     const { push } = useHistory();
 
-    const movie = movies[id];
+    const movie = movies.find(movie=>movie.id===Number(id));
     
     const handleFavoriteClick = () => {
         addFavorite(movie);
