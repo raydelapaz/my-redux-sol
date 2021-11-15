@@ -153,12 +153,12 @@ table.table .avatar {
 	width:80%;
 }
 
-.headerBar {
+/* .headerBar {
 	display: flex;
 	align-items: center;
 	padding:0px;
 	justify-content: flex-end;
-}
+} */
 
 .App {
 	text-align: center;
